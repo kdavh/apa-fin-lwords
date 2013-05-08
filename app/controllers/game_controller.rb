@@ -24,4 +24,8 @@ class GameController < ApplicationController
 
     render json: { text: @dict }
   end
+
+  def redirect
+    redirect_to "/game"
+  end
 end
