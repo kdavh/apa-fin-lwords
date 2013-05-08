@@ -1,7 +1,10 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+ActiveRecord::Base.transaction do
+  english_common_dict = CommonDictionary.create!()
+  english = Language.create!(name: 'english', 
+    common_dictionary_id: english_common_dict.id)
+  dict = []
+  file = "#{Rails.root}/app/assets/dictionaries/eng_2of12.txt"
+  File.foreach(file) do |line| 
+    dict << line
+  end
+end

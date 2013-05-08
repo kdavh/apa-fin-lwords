@@ -1,0 +1,104 @@
+.btn {
+  margin: 10px 10px;
+  padding: 8px 10px;
+  background-color: #ddd;
+  &:hover {
+    background-color: #acc;
+  }
+}
+
+.outer-box {
+  background-color: #eafaea;
+  height: 505px;
+}
+
+#menu {
+  position: absolute;
+  visibility: hidden;
+  z-index: 5;
+  background-color: rgba(170, 136, 170, 0.77);
+}
+
+#menu-bar {
+  background-color: #a8a;
+}
+
+#game-board {
+  margin: 3px 3px;
+}
+
+#guess-word-bar, #letters-bar, #show-definition-bar, #done-bar {
+  background-color: #ddd;
+  padding: 6px 10px;
+  border-bottom: 2px dotted #888;
+}
+
+#menu-button {
+  display: inline-block;
+}
+#timer {
+  display: inline-block;
+  min-height: 5px;
+  vertical-align: middle;
+  width: 110px;
+  padding-left: 20px;
+  background-color: white;
+  font-size: 40px;
+  line-height: 30px;
+  color: rgb(26, 63, 102);
+  border: 2px solid rgba(170, 136, 170, 0.69);
+}
+
+#guess-word-bar                   { min-height: 50px; }
+#letters-bar                      { min-height: 50px; }
+#show-definition-bar              { height: 140px; }
+#done-bar                         { height: 200px; }
+
+#guess-word-bar {
+  color: rgb(41, 81, 141);
+  font-size: 45px;
+  padding: 16px 10px 0px 10px
+}
+
+.letter-square {
+  text-transform: uppercase;
+  display: inline-block;
+  height: 40px;
+  width: 30px;
+  padding: 13px 14px 0px 6px;
+  margin: 3px 3px;
+  background-color: rgb(49, 86, 124);
+  border: 2px solid #8ab;
+  color: #eee;
+  font-size: 45px;
+  line-height: 20px;
+  &:hover {
+    background-color: #579;
+  }
+  &:active {
+    color: white;
+    background-color: #077;
+  }
+}
+
+#loading-gif {
+  z-index: 60;
+  position: absolute;
+  left: 50%;
+  margin-left: -400px;
+  top: -50px;
+  visibility: hidden;
+}
+
+
+@media only screen and (max-width: 479px) {
+  .letter-square {
+    width: 30px;
+    font-size: 40px;
+    padding: 8px 4px 0px 4px;
+  }
+}
+
+.letter-chosen-square {
+
+}
