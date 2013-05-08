@@ -12,6 +12,7 @@ LW.Views.MenuBar = Backbone.View.extend
       that.openMenu(event)
 
     @$('#new-game-button').on 'click', (event) ->
+      LW.Store.gameBoard.endRoundReset()
       LW.Store.gameBoard.play()
 
 
@@ -67,7 +68,7 @@ LW.Views.GameBoard = Backbone.View.extend
     $wordBar = @$('#guess-word-bar')
     $letterSquares = @$('.letter-square')
 
-    $letterSquares.on 'click', (event) =>
+    $letterSquares.on 'click.game', (event) =>
       $target = $(event.currentTarget)
       pos = $target.attr('data-pos')
       ltr = $target.attr('data-ltr')
@@ -85,7 +86,7 @@ LW.Views.GameBoard = Backbone.View.extend
         $wordBar.append(ltr)
 
 
-    @$('#delete-key').on 'click', (event) =>
+    @$('#delete-key').on 'click.game', (event) =>
       if @model.get('formedWordArray').length 
 
         # off of model
@@ -100,7 +101,7 @@ LW.Views.GameBoard = Backbone.View.extend
         $wordBar.html( $wordBar.html().slice(0, -1) )
 
 
-    @$('#enter-key').on 'click', (event) =>
+    @$('#enter-key').on 'click.game', (event) =>
       # onto model
       @model.set 'formedWordArray', []
       @model.makePickedLettersMask()
@@ -119,7 +120,7 @@ LW.Views.GameBoard = Backbone.View.extend
       else
 
     # keypress shortcuts
-    $(document).on 'keydown', =>
+    $(document).on 'keydown.game', =>
       key = event.which
       console.log 'which', key
       console.log 'keycode', event.keyCode
@@ -146,6 +147,15 @@ LW.Views.GameBoard = Backbone.View.extend
     @$('#guess-word-bar').html('')
     @model.readyForNewWord()
 
+  endRoundReset: ->
+    # count up words and points
+    @$('#guess-word-bar').html('')
+    @$('#show-definition-bar').html('')
+    @$('#found-bar').html('')
+    
+    $(document).off('.game')
+    @model.endRound()
+
 LW.Views.Timer = Backbone.View.extend
   initialize: (options) ->
     @$el = options.$el
@@ -165,4 +175,5 @@ LW.Views.Timer = Backbone.View.extend
       that.$el.html(currentMinutes + ":" + currentSeconds)
       if secs <= 0
         clearInterval(counter)
+        LW.Store.gameBoard.endRound()
         # trigger round finish event

@@ -62,8 +62,8 @@ body {
 
 #guess-word-bar                   { min-height: 50px; }
 #letters-bar                      { min-height: 50px; }
-#show-definition-bar              { height: 140px; }
-#found-bar                         { height: 200px; }
+#show-definition-bar              { height: 120px; }
+#found-bar                         { height: 160px; }
 
 #guess-word-bar {
   color: rgb(41, 81, 141);
@@ -94,6 +94,12 @@ body {
 
 .letter-square.picked {
   background-color: rgb(177, 183, 196);
+}
+
+#show-definition-bar-label {
+  position: absolute;
+  top: 210px;
+  left: 8px;
 }
 
 #loading-gif {

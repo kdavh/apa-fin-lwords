@@ -31,6 +31,8 @@ LW.Models.Game = Backbone.Model.extend
     @readyForNewWord()
     LW.Store.menuBar.timerView.start()
 
+  endRound: ->
+
 
 LW.Models.Letter = Backbone.Model.extend
 

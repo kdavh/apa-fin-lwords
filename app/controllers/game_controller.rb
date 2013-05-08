@@ -9,7 +9,7 @@ class GameController < ApplicationController
 
     case lang
     when 'english'
-      file = "#{Rails.root}/app/assets/dictionaries/eng-dict.txt"
+      file = "#{Rails.root}/lib/dictionaries/eng-dict.txt"
     when 'spanish'
 
     when 'vietnamese'
