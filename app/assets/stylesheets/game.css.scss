@@ -1,33 +1,43 @@
 .btn {
   margin: 10px 10px;
   padding: 8px 10px;
-  background-color: #ddd;
-  &:hover {
-    background-color: #acc;
-  }
+  // background-color: #ddd;
+  // &:hover {
+  //   background-color: #bbb;
+  // }
+  // &:active {
+  //   background-color: #a9a;
+  // }
 }
 
-.outer-box {
-  background-color: #eafaea;
-  height: 505px;
+body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: image-url('background2.jpg')
 }
 
 #menu {
   position: absolute;
   visibility: hidden;
   z-index: 5;
-  background-color: rgba(170, 136, 170, 0.77);
+  background-color: rgb(80,112,86);
+  box-shadow: 0px 0px 10px grey;
 }
 
 #menu-bar {
-  background-color: #a8a;
+  background-color: rgba(73, 12, 29, 0.75);
+  box-shadow: 0px 0px 10px grey;
 }
 
 #game-board {
-  margin: 3px 3px;
+  box-shadow: 0px 0px 10px grey;
 }
 
-#guess-word-bar, #letters-bar, #show-definition-bar, #done-bar {
+#guess-word-bar, #letters-bar, #show-definition-bar, #found-bar {
   background-color: #ddd;
   padding: 6px 10px;
   border-bottom: 2px dotted #888;
@@ -47,12 +57,13 @@
   line-height: 30px;
   color: rgb(26, 63, 102);
   border: 2px solid rgba(170, 136, 170, 0.69);
+  box-shadow: 0px 0px 10px grey;
 }
 
 #guess-word-bar                   { min-height: 50px; }
 #letters-bar                      { min-height: 50px; }
 #show-definition-bar              { height: 140px; }
-#done-bar                         { height: 200px; }
+#found-bar                         { height: 200px; }
 
 #guess-word-bar {
   color: rgb(41, 81, 141);
@@ -81,6 +92,10 @@
   }
 }
 
+.letter-square.picked {
+  background-color: rgb(177, 183, 196);
+}
+
 #loading-gif {
   z-index: 60;
   position: absolute;
@@ -99,12 +114,52 @@
   }
 }
 
-#delete-key {
-  width: 40px;
-  height: 32px;
+#enter-key, #delete-key {
+  font-size: 40px;
+  line-height: 0px;
+  padding: 3px 0px;
+  height: 48px;
   position: absolute;
-  right: 0px;
-  top: 0px;
-  background-image: asset-url("backspace2.png", image);
-  background-repeat: no-repeat;
+  top: 85px;
+  right: 60px;
+  border-radius: 5px;
+  background-color: rgb(41, 81, 141);
+  color: white;
+  &:hover {
+    background-color: rgb(71, 111, 171);
+  }
+  &:active {
+    background-color: rgb(21, 61, 121);
+  }
+}
+
+#enter-key {
+  width: 50px;
+  right: 90px;
+}
+
+#delete-key {
+  width: 60px;
+  right: 20px;
+  letter-spacing: -6px;
+  white-space: nowrap;
+}
+
+#found-word-display {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 250px;
+  margin-left: -200px;
+  height: 60px;
+  line-height: 55px;
+  padding: 0 20px;
+  font-size: 50px;
+  text-align: center;
+  border-radius: 15px;
+  background-color: white;
+  box-shadow: 0px 0px 20px 10px white;
+  .word {
+    width: 400px;
+  }
 }

@@ -1,27 +1,36 @@
 .container
   #menu-bar
-    .btn#menu-button menu
+    %button.btn#menu-button
+
+      %i.icon-reorder
+
     #timer
 
     %ul#menu
       %li 
-        .btn#new-game-button new game
+        %button.btn#new-game-button new game
       %li 
-        .btn#change-lang-button choose language
+        %button.btn#change-lang-button choose language
     %ul#menu-languages
 
-  .outer-box
-    #game-board
-      #guess-word-bar 
-        #delete-key
-      #letters-bar
-      #row-wrapper
-        #show-definition-bar show definitions bar
-      #done-bar done words bar
+  #game-board
+    #guess-word-bar 
+    %button#enter-key
+      %i.icon-arrow-right
+    %button#delete-key
+      %i.icon-chevron-left
+      %i.icon-remove
 
-      #loading-gif
-        = image_tag 'loading.gif'
-        #loading-text Loading dictionary ...
+    #letters-bar
+    #row-wrapper
+      #show-definition-bar show definitions bar
+    #found-bar
+      #found-words
+      #found-word-display dfasdfas
+
+    #loading-gif
+      = image_tag 'loading.gif'
+      #loading-text Loading dictionary ...
 
 
   %script(id="letter-square-tmpl" type="text/x-handlebars-template")

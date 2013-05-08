@@ -3,16 +3,19 @@ LW.Models.Game = Backbone.Model.extend
     @set 'dict', new LW.Models.Dictionary({language: 'english'})
     @set 'pickLength', 10
 
+  dict: =>
+    @get 'dict'
+
   readyForNewWord: ->
-    @makeCurrentLettersMask()
+    @makePickedLettersMask()
     @set 'formedWordArray', []
 
-  makeCurrentLettersMask: ->
+  makePickedLettersMask: ->
     arr = []
     _.times @get('pickLength'), =>
-      arr.push(true)
+      arr.push(false)
 
-    @set 'currentLettersMask', arr
+    @set 'pickedLettersMask', arr
 
   pickCurrentLetters: ->
     @set 'currentLetters', []
@@ -24,6 +27,7 @@ LW.Models.Game = Backbone.Model.extend
 
   startRound: ->
     @pickCurrentLetters()
+    @set 'foundWords', []
     @readyForNewWord()
     LW.Store.menuBar.timerView.start()
 
@@ -40,3 +44,7 @@ LW.Models.Dictionary = Backbone.Model.extend
 
     for i in [97..122] by 1
       @attributes.alphabet.push String.fromCharCode(i)
+
+  has: (word) ->
+    return true if @get('text').indexOf(" " + word + " ") != -1
+    return false

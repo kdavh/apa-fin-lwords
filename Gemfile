@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
-gem 'rambling-trie'
 gem 'haml-rails'
 
 group :development do
@@ -15,6 +14,7 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
   gem 'skeleton-rails'
   gem 'uglifier', '>= 1.0.3'
+  gem 'font-awesome-rails'
 end
 
 group :development, :test do

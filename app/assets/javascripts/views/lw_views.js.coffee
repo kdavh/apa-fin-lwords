@@ -37,7 +37,6 @@ LW.Views.GameBoard = Backbone.View.extend
   initialize: (options) ->
     @$el = $('#game-board')
     @$loadingGif = $('#loading-gif')
-
   play: ->
     @$loadingGif.css('visibility', 'visible')
     if !!@model.get('dict').get('text') == false
@@ -52,30 +51,79 @@ LW.Views.GameBoard = Backbone.View.extend
     @$loadingGif.css('visibility', 'hidden')
     @model.startRound()
     @populate()
+
     @startListeningForLetterClicks()
 
   populate: ->
     lettersBar = @$('#letters-bar')
     lettersBar.empty()
-    _.each @model.get('currentLetters'), (letter, i) =>
+    _.each @model.get('currentLetters'), (ltr, i) =>
       lettersBar.append(
-        "<div class='letter-square' data-pos='#{i}''>" + letter + '</div>'
+        "<div class='letter-square' data-pos='#{i}' data-ltr='#{ltr}'>" +
+        ltr + '</div>'
       )
 
   startListeningForLetterClicks: ->
-    @$('.letter-square').on 'click', (event) =>
+    $wordBar = @$('#guess-word-bar')
+    $letterSquares = @$('.letter-square')
+
+    $letterSquares.on 'click', (event) =>
       $target = $(event.currentTarget)
       pos = $target.attr('data-pos')
 
       # if letter hasn't been clicked, add it to view
       # and add to game model's records
-      if @model.get('currentLettersMask')[pos] == true
-        $target.css('background-color', "rgb(177, 183, 196)")
-        @$('#guess-word-bar').append($target.html())
-        @model.get('currentLettersMask')[pos] = false
+      if @model.get('pickedLettersMask')[pos] == false
+
+        # onto model
+        @model.get('pickedLettersMask')[pos] = $target.attr('data-ltr')
         @model.get('formedWordArray').push($target.html())
+
+        # onto view
+        $target.addClass('picked')
+        $wordBar.append($target.html())
+
+
+    @$('#delete-key').on 'click', (event) =>
+      if @model.get('formedWordArray').length 
+
+        # off of model
+        ltr = @model.get('formedWordArray').pop()
+        removedLetterPos = @model.get('pickedLettersMask').indexOf( ltr )
+        @model.get('pickedLettersMask')[removedLetterPos] = false
+
+        # off of view
+        $letterSquares
+          .filter('[data-pos="' + removedLetterPos + '"]')
+          .removeClass('picked')
+        $wordBar.html( $wordBar.html().slice(0, -1) )
+
+
+    @$('#enter-key').on 'click', (event) =>
+      # onto model
+      @model.set 'formedWordArray', []
+      @model.makePickedLettersMask()
+
+      # onto view
+      word = $wordBar.html()
+      $wordBar.html('')
+      $letterSquares.removeClass('picked')
+
+      if @model.get('dict').has( word ) && !_.contains( @model.get('foundWords'), word )
+        # onto model
+        @model.get('foundWords').push( word )
+
+        # onto view
+        @displayFound(word)
       else
-        #flash red or some indicator that that tile can't be used again
+
+    $(document).on 'keyup', =>
+      console.log 'type'
+
+  displayFound: (word) ->
+    @$('#found-word-display')
+      .html(word).show().fadeOut(3000)
+    @$('#found-words').append("<div class='word'>" + word + "</div>")
 
   readyBoardForWord: ->
     @$('#guess-word-bar').html('')

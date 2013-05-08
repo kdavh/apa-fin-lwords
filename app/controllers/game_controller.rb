@@ -17,7 +17,7 @@ class GameController < ApplicationController
           @dict << line 
         end
       end
-      @dict = @dict.join(' ')
+      @dict = " #{@dict.join(' ')} "
     else
       @dict = ""
     end
