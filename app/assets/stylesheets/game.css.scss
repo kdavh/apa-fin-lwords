@@ -99,6 +99,12 @@
   }
 }
 
-.letter-chosen-square {
-
+#delete-key {
+  width: 40px;
+  height: 32px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  background-image: asset-url("backspace2.png", image);
+  background-repeat: no-repeat;
 }
