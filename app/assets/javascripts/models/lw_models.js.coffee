@@ -19,7 +19,7 @@ LW.Models.Game = Backbone.Model.extend
 
   pickCurrentLetters: ->
     @set 'currentLetters', []
-    alpha = @get('dict').get('alphabet')
+    alpha = @get('dict').get('distrib_alpha')
     _.times @get('pickLength'), =>
       @get('currentLetters').push(
         alpha[ _.random(0, alpha.length - 1) ]
@@ -36,14 +36,22 @@ LW.Models.Letter = Backbone.Model.extend
 
 
 LW.Models.Dictionary = Backbone.Model.extend
+  initialize: ->
+    @listenTo @, 'sync', @makebAlphabet 
+
   url: ->
     '/game/dict/' + @get('language') + '.json'
 
-  makeAlphabet: ->
-    @attributes.alphabet = []
+  makebAlphabet: ->
+    console.log 'synced'
 
-    for i in [97..122] by 1
-      @attributes.alphabet.push String.fromCharCode(i)
+  makeAlphabet: ->
+    @set 'distrib_alpha', []
+
+    for ltr, freq of @get 'alpha'
+      for i in [0..freq-1] by 1
+        @get('distrib_alpha').push(ltr)
+    console.log 'distrib_alpha', @get 'distrib_alpha'
 
   has: (word) ->
     return true if @get('text').indexOf(" " + word + " ") != -1

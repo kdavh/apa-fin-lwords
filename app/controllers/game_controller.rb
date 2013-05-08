@@ -4,25 +4,27 @@ class GameController < ApplicationController
   end
 
   def get_dict
-    # TODO: change file format so preprocessing isn't necessary
-    @dict = []
-    if params[:lang] == 'english'
-      file = "#{Rails.root}/app/assets/dictionaries/eng_2of12.txt"
+    lang = params[:lang]
+    file = ""
+
+    case lang
+    when 'english'
+      file = "#{Rails.root}/app/assets/dictionaries/eng-dict.txt"
+    when 'spanish'
+
+    when 'vietnamese'
+
     end
 
-    if file
-      File.foreach(file) do |line| 
-        line = line.strip
-        if line.length >= 3 && line.index(/[-']/) == nil
-          @dict << line 
-        end
-      end
-      @dict = " #{@dict.join(' ')} "
+    if file.length != 0
+      @dict = File.open(file).read
+      @alpha = Game.letter_freq_hash(lang)
     else
       @dict = ""
+      @alpha = {}
     end
 
-    render json: { text: @dict }
+    render json: { text: @dict, alpha: @alpha }
   end
 
   def redirect

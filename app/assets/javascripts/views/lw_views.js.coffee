@@ -70,18 +70,19 @@ LW.Views.GameBoard = Backbone.View.extend
     $letterSquares.on 'click', (event) =>
       $target = $(event.currentTarget)
       pos = $target.attr('data-pos')
+      ltr = $target.attr('data-ltr')
 
       # if letter hasn't been clicked, add it to view
       # and add to game model's records
       if @model.get('pickedLettersMask')[pos] == false
 
         # onto model
-        @model.get('pickedLettersMask')[pos] = $target.attr('data-ltr')
-        @model.get('formedWordArray').push($target.html())
+        @model.get('pickedLettersMask')[pos] = ltr
+        @model.get('formedWordArray').push(ltr)
 
         # onto view
         $target.addClass('picked')
-        $wordBar.append($target.html())
+        $wordBar.append(ltr)
 
 
     @$('#delete-key').on 'click', (event) =>
@@ -117,8 +118,24 @@ LW.Views.GameBoard = Backbone.View.extend
         @displayFound(word)
       else
 
-    $(document).on 'keyup', =>
-      console.log 'type'
+    # keypress shortcuts
+    $(document).on 'keydown', =>
+      key = event.which
+      console.log 'which', key
+      console.log 'keycode', event.keyCode
+      switch key
+        when 13
+          @$('#enter-key').trigger 'click'
+        when 8
+          @$('#delete-key').trigger 'click'
+          event.preventDefault()
+        else
+          if key >= 65 && key <= 90
+            ltr = String.fromCharCode(key).toLowerCase()
+            $letterSquares
+              .filter($('[data-ltr="' + ltr + '"]:not(.picked)'))
+              .first()
+              .trigger('click')
 
   displayFound: (word) ->
     @$('#found-word-display')
