@@ -16,6 +16,6 @@ class GameController < ApplicationController
   end
 
   def redirect
-    redirect_to "/game"
+    redirect_to game_path
   end
 end

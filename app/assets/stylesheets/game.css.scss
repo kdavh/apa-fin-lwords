@@ -41,7 +41,7 @@ body {
   box-shadow: 0px 0px 10px grey;
 }
 
-#guess-word-bar, #pick-letters-bar, #show-definition-bar, #found-words-bar {
+#guess-word-bar, #pick-letters-bar, #definition-bar, #found-words-bar {
   background-color: #ddd;
   padding: 6px 10px;
   border-bottom: 2px dotted #888;
@@ -90,6 +90,7 @@ body {
   line-height: 0px;
   padding: 3px 0px;
   height: 48px;
+  width: 50px;
   position: absolute;
   top: 10px;
   right: 60px;
@@ -105,14 +106,11 @@ body {
 }
 
 #enter-key {
-  width: 50px;
-  right: 90px;
+  right: 80px;
 }
 
 #delete-key {
-  width: 60px;
   right: 20px;
-  letter-spacing: -6px;
   white-space: nowrap;
 }
 
@@ -151,15 +149,25 @@ body {
   }
 }
 
-#show-definition-bar {
+#definition-bar {
   position: relative;
   height: 100px; 
 }
 
-#show-definition-bar-label {
+#definition-bar-label {
   position: absolute;
   top: 5px;
   left: 8px;
+}
+
+#found-words-bar-text, #definition-bar-text {
+  // width: 100%;
+  // height: 100%;
+
+}
+
+#definition-bar-text {
+  margin-top: 20px;
 }
 
 #found-word-display {
@@ -178,13 +186,10 @@ body {
   box-shadow: 0px 0px 20px 10px white;
 }
 
-#found-words-bar-text {
-  width: 100%;
-}
-
 .word {
   padding: 0 15px;
   float: left;
+  cursor: pointer;
 }
 
 #end-round-display, #help-display {

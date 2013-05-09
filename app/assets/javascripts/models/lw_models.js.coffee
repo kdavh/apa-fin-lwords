@@ -7,7 +7,6 @@ LW.Models.Game = Backbone.Model.extend
     # pickedLettersMask
     # currentLetters
     # foundWords
-    # match
 
   emptyForRound: ->
     @set 'formedWordArray', []
@@ -15,16 +14,12 @@ LW.Models.Game = Backbone.Model.extend
     @set 'currentLetters', []
     @set 'foundWords', []
 
-  # makeMatch: ->
-  #   @makeNewMatch()
-
   saveAndResetMatch: ->
-    if @get('match')
+    if @get('match').get('rounds') > 0
       console.log 'resetting match, will save old match here'
       @get('match').reset() 
     else 
-      @set 'match', new LW.Models.Match()
-      # user pts = match pts
+      # do nothing
 
   prepNewMatch: ->
     @populatePickedLettersMask()

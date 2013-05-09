@@ -55,19 +55,16 @@ LW.Views.GameBoard = Backbone.View.extend
       model: @model.get('match')
       el: @$endRoundDisplay
 
-    @matchInProgress = false
-    # @currentLanguage = 'english'
-
   initJquerySelectors: ->
     @$loadingGif = @$('#loading-gif')
     @$endRoundDisplay = @$('#end-round-display')
     @$guessWordBarText = @$('#guess-word-bar-text')
     @$pickLettersBar = @$('#pick-letters-bar')
+    @$definitionBarText = @$('#definition-bar-text')
     @$foundWordsBarText = @$('#found-words-bar-text')
     @$deleteKey = @$('#delete-key')
     @$enterKey = @$('#enter-key')
     # @$letterSquares defined later
-
 
   startNewRound: ->
     # logic
@@ -88,11 +85,8 @@ LW.Views.GameBoard = Backbone.View.extend
   emptyForRound: ->
     @$('#pick-letters-bar').empty()
     @$guessWordBarText.empty()
-    @$('#show-definition-bar-text').empty()
+    @$('#definition-bar-text').empty()
     @$foundWordsBarText.empty()
-
-  # emptyPickLetters: ->
-
 
   getDictionary: ->
     @fetchNewDictionary() unless LW.dictionary[@model.currentLanguage]    
@@ -128,6 +122,7 @@ LW.Views.GameBoard = Backbone.View.extend
     @addEnterClickListener()
     @addKeyboardListeners()
     @addNewRoundListeners()
+    @addClickForDefinitionListeners()
 
   addLetterSquaresClickListeners: ->
     @$letterSquares.on 'click.game', (event) =>
@@ -194,6 +189,15 @@ LW.Views.GameBoard = Backbone.View.extend
     @$endRoundDisplay.on 'click', =>
       @startNewRound()
 
+  addClickForDefinitionListeners: ->
+    console.log @$definitionBarText
+    @$foundWordsBarText.on 'click', '.word', =>
+      
+      word = $(event.target).html()
+      console.log word
+      # look up word and display definition
+      @$definitionBarText.html(word + ': definition will go here')
+
   hideEndRoundDisplay: ->
     @$endRoundDisplay.fadeOut()
 
@@ -225,7 +229,7 @@ LW.Views.GameBoard = Backbone.View.extend
   openEndRoundDisplay: (points, rounds, totalPoints) ->
     height = @$('#guess-word-bar').outerHeight() +
                           @$pickLettersBar.outerHeight()
-                          
+
     @$endRoundDisplay.css('height', height)
                      .fadeIn()
 
