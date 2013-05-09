@@ -249,7 +249,7 @@ LW.Views.GameBoard = Backbone.View.extend
 
 LW.Views.Timer = Backbone.View.extend
   start: ->
-    @secs = 6
+    @secs = 45
     @render()
 
     @timer = setInterval( =>
