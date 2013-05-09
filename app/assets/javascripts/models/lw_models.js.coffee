@@ -1,22 +1,39 @@
 LW.Models.Game = Backbone.Model.extend
   initialize: ->
-    @set 'dict', new LW.Models.Dictionary({language: 'english'})
-    @set 'pickLength', 10
-    @resetMatch()
+    @set 'pickLength', 12
+    @currentLanguage = 'english'
     # match
     # formedWordArray
     # pickedLettersMask
     # currentLetters
     # foundWords
     # match
-  resetMatch: ->
-    @set 'match', new LW.Models.Match()
 
-  readyForNewWord: ->
-    @makePickedLettersMask()
+  emptyForRound: ->
     @set 'formedWordArray', []
+    @set 'pickedLettersMask', []
+    @set 'currentLetters', []
+    @set 'foundWords', []
 
-  makePickedLettersMask: ->
+  # makeMatch: ->
+  #   @makeNewMatch()
+
+  saveAndDeleteOldMatch: ->
+    if @get('match')
+      console.log 'will save old match here'
+      @set('match', null)
+      # user pts = match pts
+
+  makeAndPrepNewMatch: ->
+    @set 'match', new LW.Models.Match()
+    @populatePickedLettersMask()
+    @pickCurrentLetters()
+
+  prepNewRound: ->
+    @populatePickedLettersMask()
+    @pickCurrentLetters()
+
+  populatePickedLettersMask: ->
     arr = []
     _.times @get('pickLength'), =>
       arr.push(false)
@@ -24,60 +41,83 @@ LW.Models.Game = Backbone.Model.extend
     @set 'pickedLettersMask', arr
 
   pickCurrentLetters: ->
-    @set 'currentLetters', []
-    alpha = @get('dict').get('distrib_alpha')
+    alpha = LW.dictionary[@currentLanguage].get('frequencyAlphabet')
     _.times @get('pickLength'), =>
       @get('currentLetters').push(
         alpha[ _.random(0, alpha.length - 1) ]
       )
 
-  startRound: ->
-    @pickCurrentLetters()
-    @set 'foundWords', []
-    @readyForNewWord()
-    LW.Store.menuBar.timerView.start()
-
-  endRound: ->
-    console.log @get 'formedWordArray'
-    # if we're not starting the first round of the match
-    if !!@get('formedWordArray') != false
-      @get('match').scoreRound(@get('foundWords'))
-      if @get('match').get('rounds').length >= 10
-        console.log ""
-        # display the score and reset the game
+  resetWordPick: ->
     @set 'formedWordArray', []
-    @set 'pickedLettersMask', []
-    @set 'currentLetters', []
-    @set 'foundWords', []
+    @populatePickedLettersMask()
+
+  inDictionaryAndNotAlreadyChosen: (word) ->
+    LW.dictionary[@currentLanguage].has( word ) &&
+    !_.contains( @get('foundWords'), word )
+
+  addToFoundWords: ( word )->
+    @get('foundWords').push( word )
+
+  countPoints: ->
+    return @get('foundWords').join('').length
+
+  incrementPoints: (points) ->
+    console.log @get('match').get('score').get('pts'), points
+    @get('match').get('score').set 'pts',
+      @get('match').get('score').get('pts') + points
+
+
+  # startRound: ->
+  #   @pickCurrentLetters()
+  #   @set 'foundWords', []
+  #   @readyForNewWord()
+  #   LW.menuBar.timerView.start()
+
+  # endRound: ->
+  #   # if we're not starting the first round of the match
+  #   if @get('match').get('rounds').length != 0
+  #     pts = @get('match').get('score').get('pts')
+  #     # pts = pts + 
+
+  #     if @get('match').get('rounds').length >= 10
+  #       # display the score and reset the game
+  #       @get('match').reset()
+
+  #   @set 'formedWordArray', []
+  #   @set 'pickedLettersMask', []
+  #   @set 'currentLetters', []
+  #   @set 'foundWords', []
 
 
 LW.Models.Match = Backbone.Model.extend
   initialize: ->
-    @set 'rounds', []
-    @set 'score', LW.Store.menuBar.scoreView.model
+    @set 'rounds', 0
+    @set 'score', LW.menuBar.scoreView.model
 
   scoreRound: (foundWords) ->
     round = new LW.Models.Round()
+
+  reset: ->
+    @set 'rounds', 0
+    @get('score').set('pts', 0)
 
 LW.Models.Score = Backbone.Model.extend
   initialize: ->
     @set 'pts', 0
 
-LW.Models.Round = Backbone.Model.extend
-
 LW.Models.Dictionary = Backbone.Model.extend
   initialize: ->
-    @listenTo @, 'sync', @makebAlphabet 
+    @listenTo @, 'sync', @makeAlphabet
 
   url: ->
     '/game/dict/' + @get('language') + '.json'
 
   makeAlphabet: ->
-    @set 'distrib_alpha', []
+    @set 'frequencyAlphabet', []
 
     for ltr, freq of @get 'alpha'
       for i in [0..freq-1] by 1
-        @get('distrib_alpha').push(ltr)
+        @get('frequencyAlphabet').push(ltr)
 
   has: (word) ->
     return true if @get('text').indexOf(" " + word + " ") != -1

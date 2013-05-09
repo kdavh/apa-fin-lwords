@@ -4,12 +4,12 @@ window.LW =
   Views: {}
   Routers: {}
   Store: {}
+  dictionary: {}
 
   boot: ->
-    LW.Store.menuBar = new LW.Views.MenuBar()
-    LW.Store.gameBoard = new LW.Views.GameBoard
-      model: new LW.Models.Game
+    LW.menuBar = new LW.Views.MenuBar
+      el: $('#menu-bar')
+    LW.gameBoard = new LW.Views.GameBoard
+      model: new LW.Models.Game()
     new LW.Routers.R()
     Backbone.history.start()
-$ ->
-  LW.boot()

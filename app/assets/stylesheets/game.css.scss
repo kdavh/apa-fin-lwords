@@ -22,10 +22,13 @@ body {
 
 #menu {
   position: absolute;
-  visibility: hidden;
   z-index: 5;
   background-color: rgb(80,112,86);
   box-shadow: 0px 0px 10px grey;
+}
+
+.hidden {
+  display: none;
 }
 
 #menu-bar {
@@ -34,10 +37,11 @@ body {
 }
 
 #game-board {
+  position: relative;
   box-shadow: 0px 0px 10px grey;
 }
 
-#guess-word-bar, #letters-bar, #show-definition-bar, #found-bar {
+#guess-word-bar, #pick-letters-bar, #show-definition-bar, #found-words-bar {
   background-color: #ddd;
   padding: 6px 10px;
   border-bottom: 2px dotted #888;
@@ -59,7 +63,7 @@ body {
 #timer {
   padding-left: 20px;
   width: 90px;
-  font-size: 40px;
+  font-size: 35px;
   color: rgb(26, 63, 102);
 }
 
@@ -71,8 +75,8 @@ body {
 }
 
 #guess-word-bar                   { min-height: 50px; }
-#letters-bar                      { min-height: 50px; }
-#found-bar                         { height: 120px; }
+#pick-letters-bar                      { min-height: 50px; }
+#found-words-bar                         { height: 120px; }
 
 #guess-word-bar {
   position: relative;
@@ -113,17 +117,19 @@ body {
 }
 
 .letter-square {
+  font-family: courier;
   text-transform: uppercase;
   display: inline-block;
   height: 40px;
   width: 30px;
-  padding: 13px 14px 0px 6px;
+  padding: 13px 6px 0px 6px;
   margin: 3px 3px;
   background-color: rgb(49, 86, 124);
   border: 2px solid #8ab;
   color: #eee;
   font-size: 45px;
   line-height: 20px;
+  box-shadow: 0px 0px 6px black inset;
   &:hover {
     background-color: #579;
   }
@@ -172,7 +178,7 @@ body {
   box-shadow: 0px 0px 20px 10px white;
 }
 
-#found-words {
+#found-words-bar-text {
   width: 100%;
 }
 
@@ -181,11 +187,33 @@ body {
   float: left;
 }
 
+#end-round-display {
+  position: absolute;
+  display: none;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(73, 12, 29, 0.92);
+  z-index: 4;
+  color: #dadada;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 60px;
+  box-shadow: 0px 0px 10px black inset;
+  .end-round-score-display {
+    font-size: 50px;
+  }
+  .small-prompt {
+    font-size: 30px;
+  }
+
+}
+
 #loading-gif {
   z-index: 60;
   position: absolute;
   left: 50%;
   margin-left: -400px;
-  top: -50px;
-  visibility: hidden;
+  top: -250px;
 }

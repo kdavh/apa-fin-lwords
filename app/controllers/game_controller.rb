@@ -1,28 +1,16 @@
 class GameController < ApplicationController
   def landing
-    render :landing
   end
 
   def get_dict
     lang = params[:lang]
-    file = ""
-
-    case lang
-    when 'english'
-      file = "#{Rails.root}/lib/dictionaries/eng-dict.txt"
-    when 'spanish'
-
-    when 'vietnamese'
-
-    end
-
-    if file.length != 0
-      @dict = File.open(file).read
-      @alpha = Game.letter_freq_hash(lang)
+    if ['english', 'spanish', 'vietnamese'].include? lang
+      file = "#{Rails.root}/lib/dictionaries/#{lang}.txt"
     else
-      @dict = ""
-      @alpha = {}
+      file = "#{Rails.root}/lib/dictionaries/english.txt"
     end
+    @dict = File.open(file).read
+    @alpha = Game.letter_freq_hash(lang)
 
     render json: { text: @dict, alpha: @alpha }
   end

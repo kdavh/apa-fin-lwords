@@ -6,7 +6,7 @@
     #timer
     #score-display score
 
-    %ul#menu
+    %ul#menu.hidden
       %li 
         %button.btn#new-game-button new game
       %li 
@@ -22,21 +22,31 @@
         %i.icon-chevron-left
         %i.icon-remove
 
-    #letters-bar
+    #pick-letters-bar
     #show-definition-bar
       #show-definition-bar-text
       #show-definition-bar-label Definitions
-    #found-bar
-      #found-words
+    #found-words-bar
+      #found-words-bar-text
       #found-word-display
-
+    
+    #end-round-display
+      .end-round-score-display
+      .small-prompt (please click to continue)
     #loading-gif
       = image_tag 'loading.gif'
       #loading-text Loading dictionary ...
 
+:javascript
 
-  %script(id="letter-square-tmpl" type="text/x-handlebars-template")
-    .letter-square
+  LW.dictionary['english'] = 
+    new LW.Models.Dictionary({language: 'english'});
+  $('#loading-gif').show();
+  LW.dictionary['english'].fetch({
+    success: function(model, resp, opts) {
+      $('#loading-gif').hide();
+    }
+  });
+  $(function() { LW.boot(); });
 
-  %script(id="letter-chosen-tmpl" type="text/x-handlebars-template")
-    #letter-chosen-square
+
