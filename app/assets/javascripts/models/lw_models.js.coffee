@@ -109,3 +109,12 @@ LW.Models.Dictionary = Backbone.Model.extend
   has: (word) ->
     return true if @get('text').indexOf(" " + word + " ") != -1
     return false
+
+  lookUp: (word) ->
+    host = "http://services.aonaware.com"
+    pathAndParams = "/DictService.asmx/Define?word=" + word
+
+    $.ajax
+      url: '/dicts/' + @get('language') + '/lookup/' + word
+      success: (data) ->
+        console.log data

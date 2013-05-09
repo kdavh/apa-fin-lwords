@@ -43,6 +43,9 @@
       #loading-text Loading dictionary ...
 
 :javascript
+  // for mobile responsive touch
+  window.touchType = (typeof Touch !== "undefined") ? 'touchstart' : 'mousedown';
+
 
   LW.dictionary['english'] = 
     new LW.Models.Dictionary({language: 'english'});

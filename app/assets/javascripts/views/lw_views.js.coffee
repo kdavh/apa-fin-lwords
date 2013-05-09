@@ -125,7 +125,7 @@ LW.Views.GameBoard = Backbone.View.extend
     @addClickForDefinitionListeners()
 
   addLetterSquaresClickListeners: ->
-    @$letterSquares.on 'click.game', (event) =>
+    @$letterSquares.on '#{touchType}.game', (event) =>
       $target = $(event.currentTarget)
       pos = $target.attr('data-pos')
       ltr = $target.attr('data-ltr')
@@ -195,6 +195,7 @@ LW.Views.GameBoard = Backbone.View.extend
       
       word = $(event.target).html()
       console.log word
+      LW.dictionary[@model.currentLanguage].lookUp( word )
       # look up word and display definition
       @$definitionBarText.html(word + ': definition will go here')
 
@@ -274,7 +275,6 @@ LW.Views.Score = Backbone.View.extend
 
 LW.Views.EndRound = Backbone.View.extend
   initialize: ->
-    console.log 'endroundview model', @model
     @listenTo @model, 'change', @render
 
   render: ->
