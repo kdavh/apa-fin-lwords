@@ -32,9 +32,9 @@ LW.Views.MenuBar = Backbone.View.extend
     LW.gameBoard.getDictionary()
 
     LW.gameBoard.cleanUpListeners()
-    LW.gameBoard.model.saveAndDeleteOldMatch()
+    LW.gameBoard.model.saveAndResetMatch()
     LW.gameBoard.model.emptyForRound()
-    LW.gameBoard.model.makeAndPrepNewMatch()
+    LW.gameBoard.model.prepNewMatch()
 
     #logic and ui
     @timerView.stop()
@@ -50,6 +50,10 @@ LW.Views.GameBoard = Backbone.View.extend
   initialize: (options) ->
     @$el = $('#game-board')
     @initJquerySelectors()
+
+    @endRoundView = new LW.Views.EndRound
+      model: @model.get('match')
+      el: @$endRoundDisplay
 
     @matchInProgress = false
     # @currentLanguage = 'english'
@@ -101,12 +105,6 @@ LW.Views.GameBoard = Backbone.View.extend
     LW.dictionary[@model.currentLanguage].fetch
       success: (model, response, options) =>
         @$loadingGif.hide()
-
-  # prepForPlay: ->
-  #   @model.startRound()
-  #   @populateBoard()
-
-  #   @startListeningForLetterClicks()
 
   populatePickLetters: ->
     lettersBar = @$('#pick-letters-bar')
@@ -221,35 +219,19 @@ LW.Views.GameBoard = Backbone.View.extend
     @$foundWordsBarText.append("<span class='word'>" + word + "</span>")
 
   endRound: ->
-    points = @model.countPoints()
-    @model.incrementPoints( points )
-    @openEndRoundDisplay(points)
+    @model.recordTotals()
+    @openEndRoundDisplay()
 
-  openEndRoundDisplay: (points) ->
-    bottomEdgePosition = @$('#guess-word-bar').outerHeight() +
+  openEndRoundDisplay: (points, rounds, totalPoints) ->
+    height = @$('#guess-word-bar').outerHeight() +
                           @$pickLettersBar.outerHeight()
-    @$endRoundDisplay
-      .find('.end-round-score-display')
-      .html('You scored ' + points + ' points!')
-    @$endRoundDisplay
-      .css('height', bottomEdgePosition)
-      .fadeIn()
-
-  # endRoundReset: ->
-  #   # reset model, and count up points
-  #   @model.endRound()
-
-  #   # reset view
-  #   @$guessWordBarText.html('')
-  #   @$('#show-definition-bar-text').html('')
-  #   @$foundWordsBarText.html('')
-
-  #   $(document).off('.game')
-  #   @model.endRound()
+                          
+    @$endRoundDisplay.css('height', height)
+                     .fadeIn()
 
 LW.Views.Timer = Backbone.View.extend
   start: ->
-    @secs = 45
+    @secs = 5
     @render()
 
     @timer = setInterval( =>
@@ -286,3 +268,17 @@ LW.Views.Score = Backbone.View.extend
   render: ->
     @$el.html( @model.get('pts') )
 
+LW.Views.EndRound = Backbone.View.extend
+  initialize: ->
+    console.log 'endroundview model', @model
+    @listenTo @model, 'change', @render
+
+  render: ->
+    currentPts = @model.get('score').get('currentPts')
+    avg = @model.get('score').get('pts') / @model.get('rounds')
+    @$el
+      .find('.end-round-score-display')
+      .html(
+        'You scored ' + currentPts + 
+        ' points! Avg/round: ' + avg
+      )

@@ -187,7 +187,7 @@ body {
   float: left;
 }
 
-#end-round-display {
+#end-round-display, #help-display {
   position: absolute;
   display: none;
   top: 0;
@@ -198,16 +198,22 @@ body {
   z-index: 4;
   color: #dadada;
   text-align: center;
-  vertical-align: middle;
   line-height: 60px;
   box-shadow: 0px 0px 10px black inset;
+}
+
+#end-round-display {
+  vertical-align: middle;
   .end-round-score-display {
     font-size: 50px;
   }
   .small-prompt {
     font-size: 30px;
   }
+}
 
+#help-display {
+  font-size: 25px;
 }
 
 #loading-gif {

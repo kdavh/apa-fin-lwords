@@ -1,8 +1,8 @@
 LW.Models.Game = Backbone.Model.extend
-  initialize: ->
+  initialize: (options) ->
     @set 'pickLength', 12
     @currentLanguage = 'english'
-    # match
+    @set 'match', options.match
     # formedWordArray
     # pickedLettersMask
     # currentLetters
@@ -18,14 +18,15 @@ LW.Models.Game = Backbone.Model.extend
   # makeMatch: ->
   #   @makeNewMatch()
 
-  saveAndDeleteOldMatch: ->
+  saveAndResetMatch: ->
     if @get('match')
-      console.log 'will save old match here'
-      @set('match', null)
+      console.log 'resetting match, will save old match here'
+      @get('match').reset() 
+    else 
+      @set 'match', new LW.Models.Match()
       # user pts = match pts
 
-  makeAndPrepNewMatch: ->
-    @set 'match', new LW.Models.Match()
+  prepNewMatch: ->
     @populatePickedLettersMask()
     @pickCurrentLetters()
 
@@ -58,35 +59,25 @@ LW.Models.Game = Backbone.Model.extend
   addToFoundWords: ( word )->
     @get('foundWords').push( word )
 
-  countPoints: ->
-    return @get('foundWords').join('').length
+  recordTotals: ->
+    @recordPoints()
+    @incrementPoints()
+    @incrementRound()
 
-  incrementPoints: (points) ->
-    console.log @get('match').get('score').get('pts'), points
+  recordPoints: ->
+    pts = @get('foundWords').join('').length
+    @get('match').get('score').set 'currentPts', pts
+
+    return pts
+
+  incrementPoints: ->
     @get('match').get('score').set 'pts',
-      @get('match').get('score').get('pts') + points
+      @get('match').get('score').get('pts') +
+      @get('match').get('score').get('currentPts')
 
-
-  # startRound: ->
-  #   @pickCurrentLetters()
-  #   @set 'foundWords', []
-  #   @readyForNewWord()
-  #   LW.menuBar.timerView.start()
-
-  # endRound: ->
-  #   # if we're not starting the first round of the match
-  #   if @get('match').get('rounds').length != 0
-  #     pts = @get('match').get('score').get('pts')
-  #     # pts = pts + 
-
-  #     if @get('match').get('rounds').length >= 10
-  #       # display the score and reset the game
-  #       @get('match').reset()
-
-  #   @set 'formedWordArray', []
-  #   @set 'pickedLettersMask', []
-  #   @set 'currentLetters', []
-  #   @set 'foundWords', []
+  incrementRound: ->
+    @get('match').set('rounds', @get('match').get('rounds') + 1)
+    @get('match').get('rounds')
 
 
 LW.Models.Match = Backbone.Model.extend
@@ -104,6 +95,7 @@ LW.Models.Match = Backbone.Model.extend
 LW.Models.Score = Backbone.Model.extend
   initialize: ->
     @set 'pts', 0
+    @set 'currentPts', 0
 
 LW.Models.Dictionary = Backbone.Model.extend
   initialize: ->
