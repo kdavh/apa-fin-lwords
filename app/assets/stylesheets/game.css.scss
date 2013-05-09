@@ -46,29 +46,70 @@ body {
 #menu-button {
   display: inline-block;
 }
-#timer {
+#timer, #score-display {
   display: inline-block;
   min-height: 5px;
   vertical-align: middle;
-  width: 110px;
-  padding-left: 20px;
   background-color: white;
-  font-size: 40px;
   line-height: 30px;
-  color: rgb(26, 63, 102);
   border: 2px solid rgba(170, 136, 170, 0.69);
-  box-shadow: 0px 0px 10px grey;
+  box-shadow: 0px 0px 5px grey;
+}
+
+#timer {
+  padding-left: 20px;
+  width: 90px;
+  font-size: 40px;
+  color: rgb(26, 63, 102);
+}
+
+#score-display {
+  padding-left: 5px;
+  width: 120px;
+  font-size: 30px;
+  color: rgb(41, 98, 158);
 }
 
 #guess-word-bar                   { min-height: 50px; }
 #letters-bar                      { min-height: 50px; }
-#show-definition-bar              { height: 120px; }
-#found-bar                         { height: 160px; }
+#found-bar                         { height: 120px; }
 
 #guess-word-bar {
+  position: relative;
   color: rgb(41, 81, 141);
   font-size: 45px;
   padding: 16px 10px 0px 10px
+}
+
+#enter-key, #delete-key {
+  font-size: 40px;
+  line-height: 0px;
+  padding: 3px 0px;
+  height: 48px;
+  position: absolute;
+  top: 10px;
+  right: 60px;
+  border-radius: 5px;
+  background-color: rgb(41, 81, 141);
+  color: white;
+  &:hover {
+    background-color: rgb(71, 111, 171);
+  }
+  &:active {
+    background-color: rgb(21, 61, 121);
+  }
+}
+
+#enter-key {
+  width: 50px;
+  right: 90px;
+}
+
+#delete-key {
+  width: 60px;
+  right: 20px;
+  letter-spacing: -6px;
+  white-space: nowrap;
 }
 
 .letter-square {
@@ -96,22 +137,6 @@ body {
   background-color: rgb(177, 183, 196);
 }
 
-#show-definition-bar-label {
-  position: absolute;
-  top: 210px;
-  left: 8px;
-}
-
-#loading-gif {
-  z-index: 60;
-  position: absolute;
-  left: 50%;
-  margin-left: -400px;
-  top: -50px;
-  visibility: hidden;
-}
-
-
 @media only screen and (max-width: 479px) {
   .letter-square {
     width: 30px;
@@ -120,35 +145,15 @@ body {
   }
 }
 
-#enter-key, #delete-key {
-  font-size: 40px;
-  line-height: 0px;
-  padding: 3px 0px;
-  height: 48px;
+#show-definition-bar {
+  position: relative;
+  height: 100px; 
+}
+
+#show-definition-bar-label {
   position: absolute;
-  top: 85px;
-  right: 60px;
-  border-radius: 5px;
-  background-color: rgb(41, 81, 141);
-  color: white;
-  &:hover {
-    background-color: rgb(71, 111, 171);
-  }
-  &:active {
-    background-color: rgb(21, 61, 121);
-  }
-}
-
-#enter-key {
-  width: 50px;
-  right: 90px;
-}
-
-#delete-key {
-  width: 60px;
-  right: 20px;
-  letter-spacing: -6px;
-  white-space: nowrap;
+  top: 5px;
+  left: 8px;
 }
 
 #found-word-display {
@@ -165,7 +170,22 @@ body {
   border-radius: 15px;
   background-color: white;
   box-shadow: 0px 0px 20px 10px white;
-  .word {
-    width: 400px;
-  }
+}
+
+#found-words {
+  width: 100%;
+}
+
+.word {
+  padding: 0 15px;
+  float: left;
+}
+
+#loading-gif {
+  z-index: 60;
+  position: absolute;
+  left: 50%;
+  margin-left: -400px;
+  top: -50px;
+  visibility: hidden;
 }

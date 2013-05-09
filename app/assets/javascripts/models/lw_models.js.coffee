@@ -2,9 +2,15 @@ LW.Models.Game = Backbone.Model.extend
   initialize: ->
     @set 'dict', new LW.Models.Dictionary({language: 'english'})
     @set 'pickLength', 10
-
-  dict: =>
-    @get 'dict'
+    @resetMatch()
+    # match
+    # formedWordArray
+    # pickedLettersMask
+    # currentLetters
+    # foundWords
+    # match
+  resetMatch: ->
+    @set 'match', new LW.Models.Match()
 
   readyForNewWord: ->
     @makePickedLettersMask()
@@ -32,10 +38,32 @@ LW.Models.Game = Backbone.Model.extend
     LW.Store.menuBar.timerView.start()
 
   endRound: ->
+    console.log @get 'formedWordArray'
+    # if we're not starting the first round of the match
+    if !!@get('formedWordArray') != false
+      @get('match').scoreRound(@get('foundWords'))
+      if @get('match').get('rounds').length >= 10
+        console.log ""
+        # display the score and reset the game
+    @set 'formedWordArray', []
+    @set 'pickedLettersMask', []
+    @set 'currentLetters', []
+    @set 'foundWords', []
 
 
-LW.Models.Letter = Backbone.Model.extend
+LW.Models.Match = Backbone.Model.extend
+  initialize: ->
+    @set 'rounds', []
+    @set 'score', LW.Store.menuBar.scoreView.model
 
+  scoreRound: (foundWords) ->
+    round = new LW.Models.Round()
+
+LW.Models.Score = Backbone.Model.extend
+  initialize: ->
+    @set 'pts', 0
+
+LW.Models.Round = Backbone.Model.extend
 
 LW.Models.Dictionary = Backbone.Model.extend
   initialize: ->
@@ -44,16 +72,12 @@ LW.Models.Dictionary = Backbone.Model.extend
   url: ->
     '/game/dict/' + @get('language') + '.json'
 
-  makebAlphabet: ->
-    console.log 'synced'
-
   makeAlphabet: ->
     @set 'distrib_alpha', []
 
     for ltr, freq of @get 'alpha'
       for i in [0..freq-1] by 1
         @get('distrib_alpha').push(ltr)
-    console.log 'distrib_alpha', @get 'distrib_alpha'
 
   has: (word) ->
     return true if @get('text').indexOf(" " + word + " ") != -1

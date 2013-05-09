@@ -6,15 +6,25 @@ LW.Views.MenuBar = Backbone.View.extend
     @$menu = @$('#menu')
     @$body = $('body')
     @timerView = new LW.Views.Timer({$el: @$('#timer')})
+    @scoreView = new LW.Views.Score
+      model: new LW.Models.Score()
+      $el: @$('#score-display')
 
     # events
     @$openMenuButton.on 'click.menu-open', (event) ->
       that.openMenu(event)
 
-    @$('#new-game-button').on 'click', (event) ->
-      LW.Store.gameBoard.endRoundReset()
-      LW.Store.gameBoard.play()
+    @$('#new-game-button').on 'click', (event) =>
+      LW.Store.gameBoard.model.resetMatch()
+      @nextRoundActions()
 
+    @$('#next-round-button').on 'click', (event) =>
+      @nextRoundActions()
+
+  nextRoundActions: ->
+    LW.Store.gameBoard.endRoundReset()
+    $(document).trigger 'clearTimer'
+    LW.Store.gameBoard.play()
 
   openMenu: (event) ->
     that = this
@@ -38,24 +48,25 @@ LW.Views.GameBoard = Backbone.View.extend
   initialize: (options) ->
     @$el = $('#game-board')
     @$loadingGif = $('#loading-gif')
+
   play: ->
     @$loadingGif.css('visibility', 'visible')
     if !!@model.get('dict').get('text') == false
       @model.get('dict').fetch
         success: (model, response, options) =>
           @model.get('dict').makeAlphabet()
-          @prepPlay()
+          @prepForPlay()
     else
-      @prepPlay()
+      @prepForPlay()
 
-  prepPlay: ->
+  prepForPlay: ->
     @$loadingGif.css('visibility', 'hidden')
     @model.startRound()
-    @populate()
+    @populateBoard()
 
     @startListeningForLetterClicks()
 
-  populate: ->
+  populateBoard: ->
     lettersBar = @$('#letters-bar')
     lettersBar.empty()
     _.each @model.get('currentLetters'), (ltr, i) =>
@@ -65,7 +76,7 @@ LW.Views.GameBoard = Backbone.View.extend
       )
 
   startListeningForLetterClicks: ->
-    $wordBar = @$('#guess-word-bar')
+    $wordBar = @$('#guess-word-bar-text')
     $letterSquares = @$('.letter-square')
 
     $letterSquares.on 'click.game', (event) =>
@@ -85,7 +96,6 @@ LW.Views.GameBoard = Backbone.View.extend
         $target.addClass('picked')
         $wordBar.append(ltr)
 
-
     @$('#delete-key').on 'click.game', (event) =>
       if @model.get('formedWordArray').length 
 
@@ -99,7 +109,6 @@ LW.Views.GameBoard = Backbone.View.extend
           .filter('[data-pos="' + removedLetterPos + '"]')
           .removeClass('picked')
         $wordBar.html( $wordBar.html().slice(0, -1) )
-
 
     @$('#enter-key').on 'click.game', (event) =>
       # onto model
@@ -122,8 +131,7 @@ LW.Views.GameBoard = Backbone.View.extend
     # keypress shortcuts
     $(document).on 'keydown.game', =>
       key = event.which
-      console.log 'which', key
-      console.log 'keycode', event.keyCode
+
       switch key
         when 13
           @$('#enter-key').trigger 'click'
@@ -141,18 +149,21 @@ LW.Views.GameBoard = Backbone.View.extend
   displayFound: (word) ->
     @$('#found-word-display')
       .html(word).show().fadeOut(3000)
-    @$('#found-words').append("<div class='word'>" + word + "</div>")
+    @$('#found-words').append("<span class='word'>" + word + "</span>")
 
   readyBoardForWord: ->
-    @$('#guess-word-bar').html('')
+    @$('#guess-word-bar-text').html('')
     @model.readyForNewWord()
 
   endRoundReset: ->
-    # count up words and points
-    @$('#guess-word-bar').html('')
-    @$('#show-definition-bar').html('')
-    @$('#found-bar').html('')
-    
+    # reset model, and count up points
+    @model.endRound()
+
+    # reset view
+    @$('#guess-word-bar-text').html('')
+    @$('#show-definition-bar-text').html('')
+    @$('#found-words').html('')
+
     $(document).off('.game')
     @model.endRound()
 
@@ -162,10 +173,13 @@ LW.Views.Timer = Backbone.View.extend
 
   start: ->
     that = this
-    secs = 120
+    secs = 121
     counter = setInterval( ->
       timer()
     , 1000)
+
+    $(document).on 'clearTimer', =>
+      clearInterval(counter)
 
     timer = ->
       secs = secs - 1
@@ -177,3 +191,14 @@ LW.Views.Timer = Backbone.View.extend
         clearInterval(counter)
         LW.Store.gameBoard.endRound()
         # trigger round finish event
+
+LW.Views.Score = Backbone.View.extend
+  initialize: (options) ->
+    @$el = options.$el
+    @render()
+
+    @listenTo @model, 'change', @render
+
+  render: ->
+    @$el.html( @model.get('pts') )
+

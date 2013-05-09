@@ -1,10 +1,10 @@
 .container
   #menu-bar
     %button.btn#menu-button
-
       %i.icon-reorder
 
     #timer
+    #score-display score
 
     %ul#menu
       %li 
@@ -14,19 +14,21 @@
     %ul#menu-languages
 
   #game-board
-    #guess-word-bar 
-    %button#enter-key
-      %i.icon-arrow-right
-    %button#delete-key
-      %i.icon-chevron-left
-      %i.icon-remove
+    #guess-word-bar
+      #guess-word-bar-text
+      %button#enter-key
+        %i.icon-arrow-right
+      %button#delete-key
+        %i.icon-chevron-left
+        %i.icon-remove
 
     #letters-bar
     #show-definition-bar
-    #show-definition-bar-label Definitions
+      #show-definition-bar-text
+      #show-definition-bar-label Definitions
     #found-bar
       #found-words
-      #found-word-display dfasdfas
+      #found-word-display
 
     #loading-gif
       = image_tag 'loading.gif'

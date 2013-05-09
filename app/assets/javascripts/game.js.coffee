@@ -1,4 +1,3 @@
-console.log 'in game'
 window.LW =
   Models: {}
   Collections: {}
