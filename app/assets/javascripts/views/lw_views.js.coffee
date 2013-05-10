@@ -12,7 +12,8 @@ LW.Views.MenuBar = Backbone.View.extend
     # events, can't use backbone notation because of variables
     @$el.on touchType, '#menu-button',  @openMenu.bind(this)
     @$el.on touchType, '#new-game-button', @startMatch.bind(this)
-
+    @$('#change-lang-button').on touchType, @promptToChangeLang.bind(this)
+    @$('#help-button').on touchType, @showHelp
   openMenu: (event) ->
     @$menu.removeClass('hidden')
     @$body.on touchType + '.menu-close', (event) =>
@@ -25,6 +26,12 @@ LW.Views.MenuBar = Backbone.View.extend
     @$body.off touchType + '.menu-close'
 
     event.stopPropagation()
+
+  showHelp: (event) ->
+    LW.gameBoard.$('#help-display').fadeIn()
+
+  hideHelp: (event) ->
+    LW.gameBoard.$('#help-display').fadeOut()
 
   startMatch: ->
     # logic
@@ -45,6 +52,10 @@ LW.Views.MenuBar = Backbone.View.extend
     LW.gameBoard.populatePickLetters()
     LW.gameBoard.startListening()
 
+  promptToChangeLang: ->
+    @showLanguageChoicesDisplay()
+
+
 LW.Views.GameBoard = Backbone.View.extend
   initialize: (options) ->
     @$el = $('#game-board')
@@ -53,6 +64,11 @@ LW.Views.GameBoard = Backbone.View.extend
     @endRoundView = new LW.Views.EndRound
       model: @model.get('match')
       el: @$endRoundDisplay
+
+    @$('#help-display').on 'click', LW.menuBar.hideHelp.bind(LW.menuBar)
+  events:
+
+    'click #end-round-display' : 'startNewRound'
 
   initJquerySelectors: ->
     @$loadingGif = @$('#loading-gif')
@@ -120,7 +136,6 @@ LW.Views.GameBoard = Backbone.View.extend
     @addDeleteClickListener()
     @addEnterClickListener()
     @addKeyboardListeners()
-    @addNewRoundListeners()
     @addClickForDefinitionListeners()
 
   addLetterSquaresClickListeners: ->
@@ -184,15 +199,11 @@ LW.Views.GameBoard = Backbone.View.extend
         else
           @pickLetterAndTriggerClick( key )
 
-  addNewRoundListeners: ->
-    @$endRoundDisplay.on touchType, =>
-      @startNewRound()
-
   addClickForDefinitionListeners: ->
     @$foundWordsBarText.on touchType, '.word', =>
       
       word = $(event.target).html()
-      LW.dictionary[@model.currentLanguage].lookUp()
+      LW.dictionary[@model.currentLanguage].lookUp(word)
       # LW.dictionary[@model.currentLanguage].lookUp( word )
       # # look up word and display definition
       # @$definitionBarText.html(word + ': definition will go here')

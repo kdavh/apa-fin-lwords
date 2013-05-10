@@ -3,5 +3,5 @@ LWords::Application.routes.draw do
   get "game", to: "game#landing"
   get "game/dict/:lang", to: "game#get_dict"
 
-  get "dicts/:lang/lookup/:word", to: "dicts#lookup"
+  # get "dicts/:lang/lookup/:word", to: "dicts#lookup"
 end

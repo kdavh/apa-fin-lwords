@@ -17,6 +17,7 @@
 //
 // ** Backbone files
 //= require game
+//= require game_helpers
 //= require_tree ./models
 //= require_tree ./collections
 //= require_tree ./views

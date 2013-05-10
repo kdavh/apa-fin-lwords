@@ -1,16 +1,19 @@
 .container
   #menu-bar
-    %button.btn#menu-button
+    %button.top-menu-btn#menu-button
       %i.icon-reorder
 
     #timer
     #score-display score
 
     %ul#menu.hidden
-      %li 
-        %button.btn#new-game-button new game
-      %li 
-        %button.btn#change-lang-button choose language
+      .wrapper
+        %li 
+          %button.menu-item#new-game-button new game
+        %li 
+          %button.menu-item#change-lang-button choose language
+        %li 
+          %button.menu-item#help-button help
     %ul#menu-languages
 
   #game-board
@@ -33,10 +36,15 @@
       .end-round-score-display
       .small-prompt (please click to continue)
     #help-display
-      %div Find words in the jumble
-      %div click letter boxes, or type to form a word
-      %div click left arrow button or press left arrow button to submit
-      %div click delete-looking button or press backspace to delete a letter
+      %li Find words in the jumble while reviewing 2nd languages
+      %li Click letter boxes, or type to form a word
+      %li Click left arrow button or press enter key button to submit
+      %li Click X button or press backspace to delete a letter
+      %li Click on found words at the bottom to view translations
+      %li Translation is always to/from english to/from another language
+    #lang-display
+      
+
 
     #loading-gif
       = image_tag 'loading.gif'

@@ -2,6 +2,7 @@ LW.Models.Game = Backbone.Model.extend
   initialize: (options) ->
     @set 'pickLength', 12
     @currentLanguage = 'english'
+    @translateToLanguage = 'spanish'
     @set 'match', options.match
     # formedWordArray
     # pickedLettersMask
@@ -111,12 +112,43 @@ LW.Models.Dictionary = Backbone.Model.extend
     return false
 
   lookUp: (word) ->
-    host = "https://services.aonaware.com"
-    pathAndParams = "/DictService.asmx/Define"
+    @showLoadingStatus()
+    @makeRequest(word)
 
-    $.ajax
-      data: { word: word }
-      url: host + pathAndParams #'/dicts/' + @get('language') + '/lookup/' + word
-      success: (data) ->
-        console.log data
-      # dataType: 'http'
+  showLoadingStatus: ->
+    $('#definition-bar-label').html('Loading definition...')
+
+  hideLoadingStatus: ->
+    $('#definition-bar-label').html('')
+
+  makeRequest: (word) ->
+    url = @constructUrl(word)
+
+    $.getJSON( url, { timeout: 10000 } )
+      .done( @handleTranslation.bind(this) )
+      .always( @hideLoadingStatus.bind(this) )
+
+  constructUrl: (word) ->
+    lang1 = LW.dictionary.langHash[LW.gameBoard.model.currentLanguage]
+    lang2 = LW.dictionary.langHash[LW.gameBoard.model.translateToLanguage]
+    console.log 'langs', lang1, lang2
+    url = "http://api.wordreference.com/44241/json/"
+    url += if lang1 == 'en' then lang1 + lang2 else lang1 + 'en'
+    url += "/" + word + "?callback=?"
+
+  handleTranslation: (data) ->
+    console.log data
+    if data.term0.PrincipalTranslations
+      translations = data.term0.PrincipalTranslations
+    else
+      translations = data.term0.AdditionalTranslations
+
+    term = translations[0].OriginalTerm.term
+    termSense = translations[0].OriginalTerm.sense
+    trans = translations[0].FirstTranslation.term
+    termSense = translations[0].FirstTranslation.sense
+
+    LW.gameBoard.$definitionBarText.html(
+      term + ' (' + termSense + '): ' + 
+      trans + ' (' + termSense + ')'
+    )
