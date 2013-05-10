@@ -1,3 +1,22 @@
-### L-words, meaning, language words.  
+# L-words
 
-A simple word game that can use different language dictionaries and alphabets to help one have fun, and also brush up on vocabulary in a second language.
+A simple word game that can use different language dictionaries and alphabets to help you gamify second language learning.
+
+## Features
+* designed for mobile device or desktop
+* very basic Rails backend
+* javascript
+  * Backbone
+  * jQuery
+* CSS
+  * Skeleton
+  * large amount of custom styling
+* wordreference API for translations
+
+## Steps towards creation
+* create basic Rails backend with a controller to serve the one page app
+  * store word list files by language
+* front end javascript
+  * to click letters, reset board, keep score, etc.
+  * allow user to pick languages
+

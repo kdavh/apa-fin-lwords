@@ -13,7 +13,7 @@ LW.Views.MenuBar = Backbone.View.extend
     @$el.on touchType, '#menu-button',  @openMenu.bind(this)
     @$el.on touchType, '#new-game-button', @startMatch.bind(this)
     @$('#change-lang-button').on touchType, @promptToChangeLang.bind(this)
-    @$('#help-button').on touchType, @showHelp
+    @$('#help-button').on 'click', @showHelp
   openMenu: (event) ->
     @$menu.removeClass('hidden')
     @$body.on touchType + '.menu-close', (event) =>
