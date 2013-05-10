@@ -125,14 +125,14 @@ LW.Views.GameBoard = Backbone.View.extend
     @addClickForDefinitionListeners()
 
   addLetterSquaresClickListeners: ->
-    @$letterSquares.on '#{touchType}.game', (event) =>
+    @$letterSquares.on touchType + '.game', (event) =>
       $target = $(event.currentTarget)
       pos = $target.attr('data-pos')
-      ltr = $target.attr('data-ltr')
 
       # if letter hasn't been clicked, add it to view
       # and add to game model's records
       if @model.get('pickedLettersMask')[pos] == false
+        ltr = $target.attr('data-ltr')
 
         # onto model
         @model.get('pickedLettersMask')[pos] = ltr
