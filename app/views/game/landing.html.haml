@@ -47,7 +47,7 @@
   var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent);
   window.touchType = isMobile ? "touchstart" : "click";
 
-
+  // preload english dictionary
   LW.dictionary['english'] = 
     new LW.Models.Dictionary({language: 'english'});
   $('#loading-gif').show();

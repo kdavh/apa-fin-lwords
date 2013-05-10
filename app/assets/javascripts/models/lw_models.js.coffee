@@ -111,10 +111,12 @@ LW.Models.Dictionary = Backbone.Model.extend
     return false
 
   lookUp: (word) ->
-    host = "http://services.aonaware.com"
-    pathAndParams = "/DictService.asmx/Define?word=" + word
+    host = "https://services.aonaware.com"
+    pathAndParams = "/DictService.asmx/Define"
 
     $.ajax
-      url: '/dicts/' + @get('language') + '/lookup/' + word
+      data: { word: word }
+      url: host + pathAndParams #'/dicts/' + @get('language') + '/lookup/' + word
       success: (data) ->
         console.log data
+      # dataType: 'http'

@@ -9,21 +9,20 @@ LW.Views.MenuBar = Backbone.View.extend
       model: new LW.Models.Score()
       el: @$('#score-display')
 
-  events:
-    'click.menu-open #menu-button'  : 'openMenu'
-    'click #new-game-button'        : 'startMatch'
-    'click #next-round-button'      : 'nextRound'
+    # events, can't use backbone notation because of variables
+    @$el.on touchType, '#menu-button',  @openMenu.bind(this)
+    @$el.on touchType, '#new-game-button', @startMatch.bind(this)
 
   openMenu: (event) ->
     @$menu.removeClass('hidden')
-    @$body.on 'click.menu-close', (event) =>
+    @$body.on touchType + '.menu-close', (event) =>
       @closeMenu(event)
 
     event.stopPropagation()
 
   closeMenu: (event) ->
     @$menu.addClass('hidden')
-    @$body.off 'click.menu-close'
+    @$body.off touchType + '.menu-close'
 
     event.stopPropagation()
 
@@ -143,7 +142,7 @@ LW.Views.GameBoard = Backbone.View.extend
         @$guessWordBarText.append(ltr)
 
   addDeleteClickListener: ->
-    @$deleteKey.on 'click.game', (event) =>
+    @$deleteKey.on touchType + '.game', (event) =>
       if @model.get('formedWordArray').length 
 
         # off of model
@@ -158,7 +157,7 @@ LW.Views.GameBoard = Backbone.View.extend
         @$guessWordBarText.html( @$guessWordBarText.html().slice(0, -1) )
 
   addEnterClickListener: ->
-    @$enterKey.on 'click.game', (event) =>
+    @$enterKey.on touchType + '.game', (event) =>
       # onto logic
       @model.resetWordPick()
       # get word, and reset view
@@ -178,26 +177,25 @@ LW.Views.GameBoard = Backbone.View.extend
 
       switch key
         when 13
-          @$enterKey.trigger 'click'
+          @$enterKey.trigger touchType
         when 8
-          @$deleteKey.trigger 'click'
+          @$deleteKey.trigger touchType
           event.preventDefault()
         else
           @pickLetterAndTriggerClick( key )
 
   addNewRoundListeners: ->
-    @$endRoundDisplay.on 'click', =>
+    @$endRoundDisplay.on touchType, =>
       @startNewRound()
 
   addClickForDefinitionListeners: ->
-    console.log @$definitionBarText
-    @$foundWordsBarText.on 'click', '.word', =>
+    @$foundWordsBarText.on touchType, '.word', =>
       
       word = $(event.target).html()
-      console.log word
-      LW.dictionary[@model.currentLanguage].lookUp( word )
-      # look up word and display definition
-      @$definitionBarText.html(word + ': definition will go here')
+      LW.dictionary[@model.currentLanguage].lookUp()
+      # LW.dictionary[@model.currentLanguage].lookUp( word )
+      # # look up word and display definition
+      # @$definitionBarText.html(word + ': definition will go here')
 
   hideEndRoundDisplay: ->
     @$endRoundDisplay.fadeOut()
@@ -208,7 +206,7 @@ LW.Views.GameBoard = Backbone.View.extend
       @$letterSquares
         .filter($('[data-ltr="' + ltr + '"]:not(.picked)'))
         .first()
-        .trigger('click')
+        .trigger(touchType)
 
   getAndResetWordPick: ->
     word = @$guessWordBarText.html()
@@ -236,7 +234,7 @@ LW.Views.GameBoard = Backbone.View.extend
 
 LW.Views.Timer = Backbone.View.extend
   start: ->
-    @secs = 5
+    @secs = 45
     @render()
 
     @timer = setInterval( =>
