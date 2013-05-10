@@ -138,17 +138,31 @@ LW.Models.Dictionary = Backbone.Model.extend
 
   handleTranslation: (data) ->
     console.log data
-    if data.term0.PrincipalTranslations
-      translations = data.term0.PrincipalTranslations
-    else
-      translations = data.term0.AdditionalTranslations
 
-    term = translations[0].OriginalTerm.term
-    termSense = translations[0].OriginalTerm.sense
-    trans = translations[0].FirstTranslation.term
-    termSense = translations[0].FirstTranslation.sense
+    str = @makeDefinitionString(data)
+    str = @addLanguageLabels(str)
+    @showDefinition(str)
 
-    LW.gameBoard.$definitionBarText.html(
-      term + ' (' + termSense + '): ' + 
-      trans + ' (' + termSense + ')'
-    )
+  makeDefinitionString: (data) ->
+    mainStr = ''
+    for key, translation of data.term0
+      for key, interpretation of translation
+        str = interpretation.OriginalTerm.term
+        if interpretation.OriginalTerm.sense
+          str += ' (' + interpretation.OriginalTerm.sense + ')'
+        str += ': ' + interpretation.FirstTranslation.term
+        if interpretation.FirstTranslation.sense
+          str += ' (' + interpretation.FirstTranslation.sense + ')'
+        mainStr += '<div>' + str + '</div>'
+
+    mainStr
+
+  addLanguageLabels: (str) ->
+    label = '<div>' + 
+      LW.gameBoard.model.currentLanguage + ' to ' +
+      LW.gameBoard.model.translateToLanguage +
+      '</div>'
+    label + str
+
+  showDefinition: (str) ->
+    LW.gameBoard.$definitionBarText.html( str )

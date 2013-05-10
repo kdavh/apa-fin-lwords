@@ -154,6 +154,7 @@ body {
 #definition-bar {
   position: relative;
   height: 100px; 
+  overflow-y: auto;
 }
 
 #definition-bar-label {
@@ -188,7 +189,7 @@ body {
   cursor: pointer;
 }
 
-#end-round-display, #help-display {
+#end-round-display, #help-display, #lang-display {
   position: absolute;
   display: none;
   top: 0;
@@ -219,10 +220,32 @@ body {
   padding: 20px 30px;
 }
 
+#lang-display {
+  font-size: 25px;
+  padding: 20px 30px;
+  .lang-col-left, .lang-col-right {
+    margin-bottom: 20px;
+  }
+  .lang-col-left {
+    float: left;
+  }
+  .lang-col-right {
+    float: right;
+  }
+  .lang-box {
+    background-color: rgb(41, 81, 141);
+    padding: 0px 10px;
+    margin: 20px 0px;
+    box-shadow: 0px 0px 10px black inset;
+  }
+}
+
+
 #loading-gif {
-  z-index: 60;
+  z-index: 10;
   position: absolute;
   left: 50%;
   margin-left: -400px;
   top: -250px;
 }
+

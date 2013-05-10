@@ -43,12 +43,18 @@
       %li Click on found words at the bottom to view translations
       %li Translation is always to/from english to/from another language
     #lang-display
-      / # = button_tag 'lang', 'en'
+      .clearfix drag to connect the two languages you want to translate between
+      .lang-col-left
+        .lang-box english
+        .lang-box spanish
+      .lang-col-right
+        .lang-box english
+        .lang-box spanish
 
+  #loading-gif
+    = image_tag 'loading.gif'
+    #loading-text Loading dictionary ...
 
-    #loading-gif
-      = image_tag 'loading.gif'
-      #loading-text Loading dictionary ...
 
 :javascript
   // for mobile responsive touch
