@@ -186,6 +186,9 @@ LW.Views.GameBoard = Backbone.View.extend
         # onto view
         @displayFound(word)
 
+    # TEMPORARY: need to make all click listeners just call a function
+    # so that the keyboard listeners, etc can call that function
+
   addKeyboardListeners: ->
     $(document).on 'keydown.game', =>
       key = event.which

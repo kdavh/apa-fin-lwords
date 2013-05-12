@@ -2,6 +2,11 @@
 
 A simple word game that can use different language dictionaries and alphabets to help you gamify second language learning.
 
+Basic instructions for play:
+* Choose 'new game' from the menu at the top left
+* Find words from the jumble of letters that appear at the top, 3-12 letters
+* Click on a found word at the bottom to see its translation (only into spanish for now)
+
 ## Features
 * designed for mobile device or desktop
 * very basic Rails backend
