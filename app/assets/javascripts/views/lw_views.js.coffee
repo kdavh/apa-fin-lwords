@@ -204,12 +204,11 @@ LW.Views.GameBoard = Backbone.View.extend
 
   addClickForDefinitionListeners: ->
     @$foundWordsBarText.on touchType, '.word', =>
-      
       word = $(event.target).html()
-      LW.dictionary[@model.currentLanguage].lookUp(word)
-      # LW.dictionary[@model.currentLanguage].lookUp( word )
-      # # look up word and display definition
-      # @$definitionBarText.html(word + ': definition will go here')
+      @lookUpAndDisplay(word)
+
+  lookUpAndDisplay: (word) ->
+    LW.dictionary[@model.currentLanguage].lookUp(word)
 
   hideEndRoundDisplay: ->
     @$endRoundDisplay.fadeOut()
@@ -233,7 +232,10 @@ LW.Views.GameBoard = Backbone.View.extend
   displayFound: (word) ->
     @$('#found-word-display')
       .html(word).show().fadeOut(3000)
-    @$foundWordsBarText.append("<span class='word'>" + word + "</span>")
+    wordEl = $("<span class='word'>" + word + "</span>")
+    @$foundWordsBarText.append(wordEl)
+    # display translation
+    @lookUpAndDisplay(word)
 
   endRound: ->
     @model.recordTotals()
