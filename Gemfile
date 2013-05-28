@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
 gem 'haml-rails'
+gem 'newrelic_rpm'
 
 group :development do
   gem 'annotate'
@@ -18,6 +19,7 @@ end
 
 group :development, :test do
   gem 'sqlite3'
+  gem 'dotenv-rails'
 end
 
 group :production do

@@ -39,6 +39,9 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.2)
+    dotenv (0.7.0)
+    dotenv-rails (0.7.0)
+      dotenv (= 0.7.0)
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
@@ -64,6 +67,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.23)
     multi_json (1.7.3)
+    newrelic_rpm (3.6.1.88)
     pg (0.15.1)
     polyglot (0.3.3)
     rack (1.4.5)
@@ -118,9 +122,11 @@ PLATFORMS
 DEPENDENCIES
   annotate
   coffee-rails (~> 3.2.1)
+  dotenv-rails
   font-awesome-rails
   haml-rails
   jquery-rails
+  newrelic_rpm
   pg
   rails (= 3.2.13)
   sass-rails (~> 3.2.3)

@@ -43,13 +43,13 @@
       %li Click on found words at the bottom to view translations
       %li Translation is always to/from english to/from another language
     #lang-display
-      .clearfix drag to connect the two languages you want to translate between
+      .clearfix language to translate to
       .lang-col-left
-        .lang-box english
-        .lang-box spanish
+        %button.lang-box english
+        / .lang-box spanish
       .lang-col-right
-        .lang-box english
-        .lang-box spanish
+        %button.lang-box english
+        %button.lang-box spanish
 
   #loading-gif
     = image_tag 'loading.gif'
